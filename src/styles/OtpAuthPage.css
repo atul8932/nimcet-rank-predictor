@@ -1,0 +1,185 @@
+/* OtpAuthPage.css */
+
+/* Page Layout */
+.otp-page {
+  width: 100%;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb, #a6c1ee);
+  background-size: 400% 400%;
+  animation: gradientFlow 12s ease infinite;
+  font-family: 'Poppins', sans-serif;
+}
+
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Card Container */
+.otp-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 420px;
+  transition: transform 0.3s ease;
+}
+
+/* Logo */
+.otp-logo {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 1rem auto;
+  display: block;
+}
+
+/* Header */
+.otp-card-header h2 {
+  margin-bottom: 0.3rem;
+  text-align: center;
+  font-size: 2rem;
+  color: #301934;
+}
+
+.otp-card-header p {
+  text-align: center;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+/* Body */
+.otp-card-body {
+  margin-top: 1.5rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #444;
+}
+
+.phone-input-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.country-code {
+  background-color: #e0e0e0;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px 0 0 8px;
+  font-weight: 500;
+  color: #333;
+}
+
+input[type="tel"],
+input[type="text"] {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-left: none;
+  border-radius: 0 8px 8px 0;
+  font-size: 1rem;
+  outline: none;
+  background-color: #fffafc;
+  color: #444;
+}
+
+input::placeholder {
+  color: #999;
+}
+
+.otp-info {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 10px;
+}
+
+/* Buttons */
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 12px;
+  border: none;
+  background-image: linear-gradient(to right, #ff758c, #ff7eb3);
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+button:hover:not(:disabled) {
+  transform: scale(1.02);
+  box-shadow: 0 5px 15px rgba(255, 118, 174, 0.4);
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.change-number {
+  background: none;
+  border: none;
+  margin-top: 10px;
+  text-align: center;
+  width: 100%;
+  color: #883997;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.change-number:hover {
+  color: #65187a;
+}
+
+/* Error Box */
+.error-box {
+  margin-top: 15px;
+  padding: 12px;
+  background-color: #ffe5e5;
+  color: #c62828;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* Footer */
+.otp-card-footer {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #777;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .otp-card {
+    padding: 1.5rem;
+  }
+
+  .otp-card-header h2 {
+    font-size: 1.7rem;
+  }
+
+  input[type="tel"],
+  input[type="text"] {
+    font-size: 0.95rem;
+  }
+
+  button {
+    font-size: 0.95rem;
+  }
+}
