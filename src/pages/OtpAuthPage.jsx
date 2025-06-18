@@ -5,8 +5,6 @@ import { db } from "../Firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import logo from "../assets/logo.png";
 
-const API_KEY = "14127bc3-09f4-11ee-addf-0200cd936042"; // Replace with your actual key
-
 const OtpAuthPage = () => {
   const [phone, setPhone] = useState("");
   const [sessionId, setSessionId] = useState("");
@@ -15,6 +13,8 @@ const OtpAuthPage = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  const BACKEND_URL = "https://nimcet-rank-predictor-backend.onrender.com"; // 🔁 Change to deployed URL if needed
 
   const sendOtp = async () => {
     setError("");
@@ -37,9 +37,14 @@ const OtpAuthPage = () => {
         return;
       }
 
-      const res = await fetch(
-        `https://2factor.in/API/V1/${API_KEY}/SMS/${phone}/AUTOGEN`
-      );
+      const res = await fetch(`${BACKEND_URL}/api/send-otp`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ phone }),
+      });
+
       const data = await res.json();
 
       if (data.Status === "Success") {
@@ -49,6 +54,7 @@ const OtpAuthPage = () => {
         setError(data.Details || "Failed to send OTP");
       }
     } catch (err) {
+      console.error(err);
       setError("Error sending OTP. Try again.");
     } finally {
       setIsLoading(false);
@@ -57,6 +63,7 @@ const OtpAuthPage = () => {
 
   const verifyOtp = async () => {
     setError("");
+
     if (!otp) {
       setError("Please enter the OTP");
       return;
@@ -66,7 +73,7 @@ const OtpAuthPage = () => {
 
     try {
       const res = await fetch(
-        `https://2factor.in/API/V1/${API_KEY}/SMS/VERIFY/${sessionId}/${otp}`
+        `${BACKEND_URL}/api/verify-otp?sessionId=${sessionId}&otp=${otp}`
       );
       const data = await res.json();
 
@@ -76,6 +83,7 @@ const OtpAuthPage = () => {
         setError(data.Details || "OTP verification failed");
       }
     } catch (err) {
+      console.error(err);
       setError("Error verifying OTP. Try again.");
     } finally {
       setIsLoading(false);
@@ -85,9 +93,7 @@ const OtpAuthPage = () => {
   return (
     <div className="otp-page">
       <div className="otp-card">
-        {/* 🔥 Logo on Top */}
         <img src={logo} alt="App Logo" className="otp-logo" />
-
         <div className="otp-card-header">
           <h2>Phone Verification</h2>
           <p>
