@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { db } from "../Firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
@@ -14,9 +14,28 @@ const OtpAuthPage = () => {
   const [step, setStep]           = useState("phone");
   const [error, setError]         = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [backendReady, setBackendReady] = useState(!!db); // false until db resolves
   const navigate = useNavigate();
-  const { theme } = useTheme(); // ← reactive — re-renders when toggled
+  const { theme } = useTheme();
   const dark = theme === "dark";
+
+  // Poll until Firebase db is ready (backend cold-start can take 30-50s)
+  useEffect(() => {
+    if (db) { setBackendReady(true); return; }
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/config/firebase`,
+          { signal: AbortSignal.timeout(5000) });
+        if (res.ok) {
+          clearInterval(interval);
+          // reload the module to get the db instance
+          window.location.reload();
+        }
+      } catch { /* still waking up */ }
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
 
   /* ── colours derived from reactive theme ── */
   const bg        = dark ? "#0f172a" : "#ffffff";
@@ -62,7 +81,26 @@ const OtpAuthPage = () => {
   };
 
   return (
-    <div style={{ display:"flex", flex:1, overflow:"auto", transition:"background 0.3s" }}>
+    <div style={{ display:"flex", flex:1, overflow:"auto", transition:"background 0.3s",
+      flexDirection:"column" }}>
+
+      {/* ══ SERVER WAKE-UP BANNER (shown only when backend is cold-starting) ══ */}
+      {!backendReady && (
+        <div style={{ background:"linear-gradient(90deg,#1e3a8a,#4338ca)", color:"#fff",
+          padding:"10px 20px", textAlign:"center", fontSize:"13px", fontWeight:"500",
+          display:"flex", alignItems:"center", justifyContent:"center", gap:"10px",
+          flexShrink:0 }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+            style={{ animation:"spin 1s linear infinite", flexShrink:0 }}>
+            <circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.3)" strokeWidth="3"/>
+            <path d="M12 2a10 10 0 0110 10" stroke="white" strokeWidth="3" strokeLinecap="round"/>
+          </svg>
+          Waking up server (Render free tier)… please wait 20–40 seconds. Page will refresh automatically.
+        </div>
+      )}
+
+      {/* ══ MAIN SPLIT LAYOUT ══ */}
+      <div style={{ display:"flex", flex:1, overflow:"auto" }}>
 
       {/* ══ LEFT PANEL — blue gradient, desktop only ══ */}
       <div style={{
@@ -207,7 +245,8 @@ const OtpAuthPage = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div>  {/* end main split layout */}
+      </div>  {/* end outer column wrapper */}
     </div>
   );
 };
