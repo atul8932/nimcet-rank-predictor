@@ -1,19 +1,29 @@
-// src/firebase.js
+// src/Firebase.js
+// Firebase config is fetched at runtime from the backend
+// so no secrets ever appear in the frontend bundle.
+
 import { initializeApp, getApps } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAU9Xc689PfEqJfqmT8gKO8bcINJ4KtTEc",
-  authDomain: "nimcet-rank-predictor.firebaseapp.com",
-  projectId: "nimcet-rank-predictor",
-  storageBucket: "nimcet-rank-predictor.firebasestorage.app",
-  messagingSenderId: "748145022328",
-  appId: "1:748145022328:web:129105782a8f40710fe48d",
-};
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-// Initialize only if not already initialized
-const app =
-  getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+let app;
+let db;
 
-// Export Firestore if needed
-export const db = getFirestore(app);
+try {
+  // GET /api/config/firebase  — served by the backend from .env vars
+  const response = await fetch(`${BACKEND_URL}/api/config/firebase`);
+  if (!response.ok) throw new Error("Failed to fetch Firebase config");
+
+  const firebaseConfig = await response.json();
+  app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+  db  = getFirestore(app);
+} catch (error) {
+  console.error("[Firebase] Could not load config from backend:", error.message);
+  console.error(
+    "[Firebase] Make sure the backend is running at",
+    BACKEND_URL
+  );
+}
+
+export { app, db };

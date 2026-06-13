@@ -1,78 +1,93 @@
+/* ─── Google Font — MUST come before everything else ──────── */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
+
+/* ─── Tailwind v4 ──────────────────────────────────────────── */
+@import "tailwindcss";
+
+/*
+  ⚠️  CRITICAL for dark mode toggle to work:
+  Tell Tailwind v4 that dark: variants activate when any ancestor
+  has the `.dark` class (set by ThemeContext on <html>).
+  Without this line, Tailwind v4 ONLY uses prefers-color-scheme
+  and the JavaScript toggle does absolutely nothing.
+*/
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ─── Design tokens — light ───────────────────────────────── */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  --font-sans:     "Inter", system-ui, sans-serif;
+  --color-bg:      #f1f5f9;
+  --color-surface: #ffffff;
+  --color-border:  #e2e8f0;
+  --color-text:    #0f172a;
+  --color-muted:   #64748b;
+  --color-accent:  #2563eb;
+}
 
-  color-scheme: light dark;
-  color: rgba(55, 3, 3, 0.87);
-  background-color: #f9f9f9;
+/* ─── Design tokens — dark ────────────────────────────────── */
+.dark {
+  --color-bg:      #0f172a;
+  --color-surface: #1e293b;
+  --color-border:  #334155;
+  --color-text:    #f1f5f9;
+  --color-muted:   #94a3b8;
+  --color-accent:  #60a5fa;
+}
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
+/* ─── Base reset ───────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
 body {
-  margin: 0;
-  min-width: 320px;
   min-height: 100vh;
-  background-color: #f9f9f9;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Optional: reset flex centering that was interfering */
 #root {
-  margin: 0 auto;
-  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Typography */
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* ─── Scrollbar ────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 99px; }
+.dark ::-webkit-scrollbar-thumb { background: #475569; }
+
+/* ─── Shimmer keyframe (used on button hover) ─────────────── */
+@keyframes shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
 }
 
-/* Button base styles */
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
 
-/* Light mode support */
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-
-  a:hover {
-    color: #747bff;
-  }
-
-  button {
-    background-color: #f9f9f9;
-  }
+/* ─── Glass panel utility ─────────────────────────────────── */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
+.dark .glass {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* ─── Text selection ───────────────────────────────────────── */
+::selection { background: #2563eb33; color: inherit; }

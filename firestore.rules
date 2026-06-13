@@ -1,0 +1,21 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /nimcet_users/{userId} {
+      // Allow users to read their own data based on phone (if using firebase auth, it would be request.auth.token.phone)
+      // Since we use custom OTP, we only allow creating new docs if the phone doesn't already exist for another document.
+      // A more robust implementation requires Cloud Functions or Custom Auth tokens.
+      // Basic rule for this frontend: Allow read/write for now, but prevent updating existing records.
+      
+      allow read: if true; // In production, this should be restricted to admin or matching phone via custom claims.
+      
+      // Allow creation only if the document contains valid schema
+      allow create: if request.resource.data.keys().hasAll(['name', 'phone', 'marks', 'category', 'regNo']) 
+                    && request.resource.data.marks >= 0 
+                    && request.resource.data.marks <= 1000
+                    && request.resource.data.name is string;
+      
+      allow update, delete: if false; // Prevent modification or deletion of submitted reports
+    }
+  }
+}
