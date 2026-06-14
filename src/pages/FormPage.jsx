@@ -1,9 +1,11 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { collection, addDoc, getDocs, query, where, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, getDocs, query, where, serverTimestamp, updateDoc } from "firebase/firestore";
 import { db } from "../Firebase";
 import { useTheme } from "../context/ThemeContext";
 import logo from "../assets/logo.png";
+import collegeCutoffs from "../data/college_cutoffs.json";
+import marksData from "../data/marks_to_rank.json";
 
 export default function FormPage() {
   const navigate = useNavigate();
@@ -42,14 +44,18 @@ export default function FormPage() {
     try {
       const q = query(collection(db, "nimcet_users"), where("phone", "==", phone));
       const snap = await getDocs(q);
-      if (snap.size >= 2) { 
-        setError("You have reached the maximum limit of 2 reports.");
-        setSubmitting(false);
-        return; 
+      
+      let attempts = 0;
+      let existingDocRef = null;
+      if (!snap.empty) {
+        existingDocRef = snap.docs[0].ref;
+        attempts = snap.docs[0].data().attempts || 1;
+        if (attempts >= 2) {
+          setError("You have reached the maximum limit of 2 reports.");
+          setSubmitting(false);
+          return; 
+        }
       }
-
-      const marksData = (await import("../data/marks_to_rank.json")).default;
-      const cutoffData = (await import("../data/college_cutoffs.json")).default;
 
       let rankStr = "N/A";
       let rankLow = null;
@@ -70,8 +76,13 @@ export default function FormPage() {
         name: form.name.trim(), phone, marks, category: form.category,
         regNo: form.regNo.trim(), city: form.city.trim(), state: form.state.trim(),
         rank: rankStr, topCollege, fallbackCollege, createdAt: serverTimestamp(),
+        attempts: attempts + 1
       };
-      await addDoc(collection(db, "nimcet_users"), payload);
+      if (existingDocRef) {
+        await updateDoc(existingDocRef, payload);
+      } else {
+        await addDoc(collection(db, "nimcet_users"), payload);
+      }
       navigate("/report", { state: payload });
     } catch (err) {
       console.error(err);
