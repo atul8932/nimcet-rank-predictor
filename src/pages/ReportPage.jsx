@@ -38,10 +38,11 @@ const ReportPage = () => {
   const rr         = rankRecord ? { rankLow: rankRecord.rank_low, rankHigh: rankRecord.rank_high } : null;
   const rankStr    = rr ? `${rr.rankLow} – ${rr.rankHigh}` : "N/A";
 
-  const catList  = [...(collegeCutoffs[data.category] || [])].sort((a,b) => a.low - b.low);
-  const topC     = catList.find(c => rr && c.low <= rr.rankLow && rr.rankLow <= c.high);
-  const fallbackC= catList.find(c => rr && rr.rankLow < c.low);
-  const colleges = { top: topC?.college || "Not Eligible", fallback: fallbackC?.college || "None" };
+  const catList          = [...(collegeCutoffs[data.category] || [])].sort((a,b) => a.high - b.high);
+  const eligibleColleges = catList.filter(c => rr && rr.rankLow <= c.high);
+  const topC             = eligibleColleges.length > 0 ? eligibleColleges[0] : null;
+  const fallbackC        = eligibleColleges.length > 1 ? eligibleColleges[1] : null;
+  const colleges         = { top: topC?.college || "Not Eligible", fallback: fallbackC?.college || "None" };
 
   /* ── PDF download ── */
   const handleDownloadPDF = async () => {
