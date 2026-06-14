@@ -5,11 +5,11 @@ import collegeCutoffs from "../data/college_cutoffs.json";
 import { useTheme } from "../context/ThemeContext";
 import { generatePdf } from "../utils/generatePdf";
 import logo from "../assets/logo.png";
-
-import photo1 from "../assets/image1.jpg";
-import photo2 from "../assets/image2.jpg";
-import photo3 from "../assets/image3.jpg";
-import photo4 from "../assets/image4.jpg";
+import topper1 from "../assets/topper1.jpg";
+import topper2 from "../assets/topper2.jpg";
+import ad1 from "../assets/ad_course1.png";
+import ad2 from "../assets/ad_course2.png";
+import ad3 from "../assets/ad_course3.png";
 
 const ReportPage = () => {
   const location          = useLocation();
@@ -21,10 +21,8 @@ const ReportPage = () => {
   const data              = location.state;
 
   const photos = [
-    { id:1, url:photo1, link:"https://acmea.courses.store/404876",  alt:"ACME Toppers 1" },
-    { id:2, url:photo2, link:"https://acmea.courses.store/404876",  alt:"ACME Toppers 2" },
-    { id:3, url:photo3, link:"https://acmea.on-app.in/app/home",    alt:"ACME Toppers 3" },
-    { id:4, url:photo4, link:"https://acmea.on-app.in/app/home",    alt:"ACME Toppers 4" },
+    { id:1, url:topper1, link:"https://acmeacademy.in", alt:"ACME Top Achiever 1" },
+    { id:2, url:topper2, link:"https://acmeacademy.in", alt:"ACME Top Achiever 2" }
   ];
 
   useEffect(() => {
@@ -257,8 +255,8 @@ const ReportPage = () => {
                   ACME Top Achievers
                 </p>
               </div>
-              <div style={{ position:"relative", height:"210px", overflow:"hidden" }}>
-                <div style={{ display:"flex", height:"100%",
+              <div style={{ position:"relative", aspectRatio:"1", width:"100%", overflow:"hidden", display:"flex", alignItems:"center", justifyContent:"center" }}>
+                <div style={{ display:"flex", height:"100%", width:"100%",
                   transform:`translateX(-${slide*100}%)`,
                   transition:"transform 0.6s ease" }}>
                   {photos.map(p => (
@@ -266,7 +264,7 @@ const ReportPage = () => {
                       <a href={p.link} target="_blank" rel="noopener noreferrer"
                         style={{ display:"block", width:"100%", height:"100%" }}>
                         <img src={p.url} alt={p.alt}
-                          style={{ width:"100%", height:"100%", objectFit:"cover" }}/>
+                          style={{ width:"100%", height:"100%", objectFit:"contain", background:"#0f172a" }}/>
                       </a>
                     </div>
                   ))}
@@ -283,6 +281,121 @@ const ReportPage = () => {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* ── Advertisement Section ── */}
+        <div style={{
+          marginTop: "32px",
+          ...cardStyle({ padding:"28px" }),
+          background: dark ? "linear-gradient(135deg, #1e293b, #0f172a)" : "linear-gradient(135deg, #ffffff, #f8fafc)",
+          border: `1px solid ${dark ? "rgba(59,130,246,0.3)" : "rgba(59,130,246,0.2)"}`,
+          boxShadow: dark ? "0 10px 30px rgba(0,0,0,0.3)" : "0 10px 30px rgba(59,130,246,0.08)"
+        }}>
+          <div style={{ textAlign:"center", marginBottom:"24px" }}>
+            <div style={{ display:"inline-block", background:"#fee2e2", color:"#ef4444", padding:"4px 12px", borderRadius:"20px", fontSize:"12px", fontWeight:"800", textTransform:"uppercase", letterSpacing:"0.05em", marginBottom:"12px" }}>
+              Level Up Your Prep
+            </div>
+            <h3 style={{ fontSize:"clamp(18px, 3vw, 24px)", fontWeight:"800", color: txtMain, margin:"0 0 8px" }}>
+              Didn't make it to your dream college this year?
+            </h3>
+            <p style={{ fontSize:"15px", color: txtMuted, margin:0, maxWidth:"600px", marginInline:"auto" }}>
+              Don't worry! You still have a chance to ace your exams with our premium courses designed specifically for NIMCET & CUET 2027.
+            </p>
+          </div>
+          
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit, minmax(280px, 1fr))", gap:"20px" }}>
+            {/* Course 1 */}
+            <a href="https://acmea.courses.store/615002" target="_blank" rel="noopener noreferrer" style={{ textDecoration:"none", display:"flex" }}>
+              <div style={{ flex:1, borderRadius:"16px", background: dark?"rgba(15,23,42,0.6)":"#f1f5f9", border:`1px solid ${cardBdr}`, display:"flex", flexDirection:"column", overflow:"hidden", transition:"transform 0.2s, box-shadow 0.2s" }}
+                onMouseEnter={(e)=>{e.currentTarget.style.transform="translateY(-4px)";e.currentTarget.style.boxShadow=dark?"0 12px 24px rgba(0,0,0,0.4)":"0 12px 24px rgba(0,0,0,0.08)"}}
+                onMouseLeave={(e)=>{e.currentTarget.style.transform="none";e.currentTarget.style.boxShadow="none"}}>
+                <img src={ad1} alt="Lakshya Dropper Batch" style={{ width:"100%", aspectRatio:"1", objectFit:"cover", borderBottom:`1px solid ${cardBdr}` }} />
+                <div style={{ padding:"20px", display:"flex", flexDirection:"column", flex:1 }}>
+                  <div style={{ display:"flex", gap:"8px", marginBottom:"10px", flexWrap:"wrap" }}>
+                    <span style={{ fontSize:"10px", fontWeight:"800", background:"#fee2e2", color:"#dc2626", padding:"4px 8px", borderRadius:"6px", textTransform:"uppercase" }}>Dropper Batch</span>
+                    <span style={{ fontSize:"10px", fontWeight:"800", background:"#fef08a", color:"#854d0e", padding:"4px 8px", borderRadius:"6px", textTransform:"uppercase" }}>Extra ₹2,000 Off</span>
+                  </div>
+                  <h4 style={{ fontSize:"16px", fontWeight:"800", color: txtMain, margin:"0 0 8px", lineHeight:1.4 }}>
+                    NIMCET 2027 Lakshya Dropper Batch | NIMCET-2027 & CUET
+                  </h4>
+                  <div style={{ flex:1 }}></div>
+                  <div style={{ marginTop:"16px", display:"flex", alignItems:"flex-end", justifyContent:"space-between" }}>
+                    <div>
+                      <span style={{ fontSize:"12px", color:txtMuted, textDecoration:"line-through", marginRight:"6px" }}>₹20,000</span>
+                      <span style={{ fontSize:"22px", fontWeight:"900", color: dark?"#34d399":"#059669" }}>₹18,000</span>
+                    </div>
+                    <div style={{ width:"32px", height:"32px", borderRadius:"50%", background:"#2563eb", display:"flex", alignItems:"center", justifyContent:"center", color:"#fff" }}>
+                      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </a>
+            
+            {/* Course 2 */}
+            <a href="https://acmea.courses.store/380094" target="_blank" rel="noopener noreferrer" style={{ textDecoration:"none", display:"flex" }}>
+              <div style={{ flex:1, borderRadius:"16px", background: dark?"rgba(15,23,42,0.6)":"#f1f5f9", border:`1px solid ${cardBdr}`, display:"flex", flexDirection:"column", overflow:"hidden", transition:"transform 0.2s, box-shadow 0.2s" }}
+                onMouseEnter={(e)=>{e.currentTarget.style.transform="translateY(-4px)";e.currentTarget.style.boxShadow=dark?"0 12px 24px rgba(0,0,0,0.4)":"0 12px 24px rgba(0,0,0,0.08)"}}
+                onMouseLeave={(e)=>{e.currentTarget.style.transform="none";e.currentTarget.style.boxShadow="none"}}>
+                <img src={ad2} alt="VOD Course" style={{ width:"100%", aspectRatio:"1", objectFit:"cover", borderBottom:`1px solid ${cardBdr}` }} />
+                <div style={{ padding:"20px", display:"flex", flexDirection:"column", flex:1 }}>
+                  <div style={{ display:"flex", gap:"8px", marginBottom:"10px", flexWrap:"wrap" }}>
+                    <span style={{ fontSize:"10px", fontWeight:"800", background:"#f3e8ff", color:"#7e22ce", padding:"4px 8px", borderRadius:"6px", textTransform:"uppercase" }}>VOD Course</span>
+                    <span style={{ fontSize:"10px", fontWeight:"800", background:"#fef08a", color:"#854d0e", padding:"4px 8px", borderRadius:"6px", textTransform:"uppercase" }}>Extra ₹500 Off</span>
+                  </div>
+                  <h4 style={{ fontSize:"16px", fontWeight:"800", color: txtMain, margin:"0 0 8px", lineHeight:1.4 }}>
+                    VOD COURSE | NIMCET 2027 | CUET 2027 (ASSC-ACME Self...)
+                  </h4>
+                  <div style={{ flex:1 }}></div>
+                  <div style={{ marginTop:"16px", display:"flex", alignItems:"flex-end", justifyContent:"space-between" }}>
+                    <div>
+                      <span style={{ fontSize:"12px", color:txtMuted, textDecoration:"line-through", marginRight:"6px" }}>₹7,000</span>
+                      <span style={{ fontSize:"22px", fontWeight:"900", color: dark?"#34d399":"#059669" }}>₹6,500</span>
+                    </div>
+                    <div style={{ width:"32px", height:"32px", borderRadius:"50%", background:"#2563eb", display:"flex", alignItems:"center", justifyContent:"center", color:"#fff" }}>
+                      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </a>
+            
+            {/* Course 3 */}
+            <a href="https://acmea.courses.store/290322" target="_blank" rel="noopener noreferrer" style={{ textDecoration:"none", display:"flex" }}>
+              <div style={{ flex:1, borderRadius:"16px", background: dark?"rgba(15,23,42,0.6)":"#f1f5f9", border:`1px solid ${cardBdr}`, display:"flex", flexDirection:"column", overflow:"hidden", transition:"transform 0.2s, box-shadow 0.2s" }}
+                onMouseEnter={(e)=>{e.currentTarget.style.transform="translateY(-4px)";e.currentTarget.style.boxShadow=dark?"0 12px 24px rgba(0,0,0,0.4)":"0 12px 24px rgba(0,0,0,0.08)"}}
+                onMouseLeave={(e)=>{e.currentTarget.style.transform="none";e.currentTarget.style.boxShadow="none"}}>
+                <img src={ad3} alt="Test Series" style={{ width:"100%", aspectRatio:"1", objectFit:"cover", borderBottom:`1px solid ${cardBdr}` }} />
+                <div style={{ padding:"20px", display:"flex", flexDirection:"column", flex:1 }}>
+                  <div style={{ display:"flex", gap:"8px", marginBottom:"10px", flexWrap:"wrap" }}>
+                    <span style={{ fontSize:"10px", fontWeight:"800", background:"#dbeafe", color:"#1d4ed8", padding:"4px 8px", borderRadius:"6px", textTransform:"uppercase" }}>Test Series</span>
+                    <span style={{ fontSize:"10px", fontWeight:"800", background:"#e0e7ff", color:"#4338ca", padding:"4px 8px", borderRadius:"6px", textTransform:"uppercase" }}>Best Seller</span>
+                  </div>
+                  <h4 style={{ fontSize:"16px", fontWeight:"800", color: txtMain, margin:"0 0 8px", lineHeight:1.4 }}>
+                    ACME Premium Test Series<br/><span style={{fontSize:"13px", fontWeight:"600", color:txtLight}}>Target: NIMCET, CUET & MAH-CET</span>
+                  </h4>
+                  <div style={{ flex:1 }}></div>
+                  <div style={{ marginTop:"16px", display:"flex", alignItems:"flex-end", justifyContent:"space-between" }}>
+                    <div>
+                      <span style={{ fontSize:"22px", fontWeight:"900", color: dark?"#34d399":"#059669" }}>₹4,633</span>
+                    </div>
+                    <div style={{ width:"32px", height:"32px", borderRadius:"50%", background:"#2563eb", display:"flex", alignItems:"center", justifyContent:"center", color:"#fff" }}>
+                      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          
+          <div style={{ textAlign:"center", marginTop:"24px", paddingTop:"20px", borderTop:`1px solid ${cardBdr}` }}>
+            <a href="https://acmea.courses.store" target="_blank" rel="noopener noreferrer" style={{ display:"inline-flex", alignItems:"center", gap:"8px", fontSize:"15px", fontWeight:"700", color:"#2563eb", textDecoration:"none", padding:"8px 16px", borderRadius:"8px", transition:"background 0.2s" }}
+               onMouseEnter={(e)=>e.currentTarget.style.background=dark?"rgba(37,99,235,0.1)":"#eff6ff"}
+               onMouseLeave={(e)=>e.currentTarget.style.background="transparent"}>
+              Also for more courses visit acmea.courses.store
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </a>
           </div>
         </div>
       </div>
