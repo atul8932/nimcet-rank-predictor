@@ -42,28 +42,34 @@ export default function FormPage() {
     try {
       const q = query(collection(db, "nimcet_users"), where("phone", "==", phone));
       const snap = await getDocs(q);
-      if (!snap.empty) { navigate("/report", { state: snap.docs[0].data() }); return; }
+      if (snap.size >= 2) { 
+        setError("You have reached the maximum limit of 2 reports.");
+        setSubmitting(false);
+        return; 
+      }
 
       const marksData = (await import("../data/marks_to_rank.json")).default;
       const cutoffData = (await import("../data/college_cutoffs.json")).default;
 
-      let predictedRank = null;
+      let rankStr = "N/A";
+      let rankLow = null;
       for (const r of marksData) {
-        if (marks >= r.low && marks <= r.high) { predictedRank = r.rank; break; }
+        if (marks >= r.min_marks && marks <= r.max_marks) { 
+          rankLow = r.rank_low;
+          rankStr = `${r.rank_low} - ${r.rank_high}`;
+          break; 
+        }
       }
 
-      const catList = cutoffData[form.category] || [];
-      let topCollege = null, fallbackCollege = null;
-      for (const e of catList) {
-        if (predictedRank >= e.low && predictedRank <= e.high) { topCollege = e.college; break; }
-      }
-      const eligible = catList.filter(e => predictedRank <= e.high);
-      if (eligible.length > 1) fallbackCollege = eligible[1]?.college || null;
+      const catList = [...(cutoffData[form.category] || [])].sort((a,b) => a.high - b.high);
+      const eligible = catList.filter(e => rankLow !== null && rankLow <= e.high);
+      const topCollege = eligible.length > 0 ? eligible[0].college : "Not Eligible";
+      const fallbackCollege = eligible.length > 1 ? eligible[1].college : "None";
 
       const payload = {
         name: form.name.trim(), phone, marks, category: form.category,
         regNo: form.regNo.trim(), city: form.city.trim(), state: form.state.trim(),
-        rank: predictedRank, topCollege, fallbackCollege, createdAt: serverTimestamp(),
+        rank: rankStr, topCollege, fallbackCollege, createdAt: serverTimestamp(),
       };
       await addDoc(collection(db, "nimcet_users"), payload);
       navigate("/report", { state: payload });
@@ -172,7 +178,7 @@ export default function FormPage() {
                     <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                     </svg>
-                    Only 1 result allowed per device
+                    Up to 2 results allowed per number
                   </p>
                 </div>
                 <div>

@@ -53,7 +53,7 @@ const OtpAuthPage = () => {
     setIsLoading(true);
     try {
       const snap = await getDocs(query(collection(db, "nimcet_users"), where("phone", "==", phone)));
-      if (!snap.empty) { setError("A report already exists for this number."); return; }
+      if (snap.size >= 2) { setError("You have reached the maximum limit of 2 reports for this number."); return; }
       const res  = await fetch(`${BACKEND_URL}/api/otp/send`, {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ phone }),
